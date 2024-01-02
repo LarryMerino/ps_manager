@@ -1,0 +1,21 @@
+services:
+  prestashop:
+    image: prestashop/prestashop:1.7.7-7.3
+    container_name: dev-ps
+    volumes:
+      - ./dev-files/ps_files:/var/www/html
+    ports:
+      - 8080:80
+    environment:
+      - DB_SERVER=ps_database
+
+  ps_database:
+    image: mysql:5.7
+    container_name: dev-ps-db
+    volumes:
+      - ./dev-files/db_files:/var/lib/mysql
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+

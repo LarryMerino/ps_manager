@@ -5,16 +5,18 @@
 This Rust-based project is designed to interact with the PrestaShop Webservice API to retrieve invoice data and generate PDF invoices locally from this data.
 
 ## Table of Contents
-1. [Installation](#installation)
+1. [Deployment](#deployment)
 2. [Usage](#usage)
 3. [Contribution](#contribution)
 4. [License](#license)
 
-## Installation
+## Deployment
 
 To install and run this project, follow these steps:
 
 1. Clone the repository to your local machine: ` git clone https://github.com/LarryMerino/ps-invoice-generator.git`
+2. Run `docker compose up` command to start a database container and a Prestashop container. Data that requires persistence is stored in the `dev-files` directory
+3. Establish a new store via a web browser by accessing the `localhost:8080` URL and following the Prestashop installation guidelines.
 
 ## Usage
 

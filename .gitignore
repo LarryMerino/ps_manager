@@ -12,3 +12,9 @@ Cargo.lock
 
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
+
+# Generated files for Prestashop data persistence 
+dev-files/db_files/*
+!dev-files/db_files/.gitkeep
+dev-files/ps_files/*
+!dev-files/ps_files/.gitkeep
