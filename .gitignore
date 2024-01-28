@@ -18,3 +18,6 @@ dev-files/db_files/*
 !dev-files/db_files/.gitkeep
 dev-files/ps_files/*
 !dev-files/ps_files/.gitkeep
+
+# Keep staging config files out of the repo
+config/staging.toml
