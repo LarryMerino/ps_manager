@@ -17,6 +17,22 @@ To install and run this project, follow these steps:
 1. Clone the repository to your local machine: ` git clone https://github.com/LarryMerino/ps-invoice-generator.git`
 2. Run `docker compose up` command to start a database container and a Prestashop container. Data that requires persistence is stored in the `dev-files` directory
 3. Establish a new store via a web browser by accessing the `localhost:8080` URL and following the Prestashop installation guidelines.
+4. Follow Prestashop [instructions](https://devdocs.prestashop-project.org/8/webservice/tutorials/creating-access/) for API key creation
+5. The project is built to accommodate multiple configurations for different stores, providing flexibility and customization options. These configurations are conveniently located within the project's config folder.
+   * Navigate to the config folder in the project.
+   * Locate the `default.toml` configuration file.
+   * Open `default.toml` in a text editor of your choice.
+   * Replace the placeholder values with the actual information for your store, including the domain and API key.  
+       ```Toml
+       [host]
+       url = "your_store_domain.com"
+       key = "your_api_key"
+   
+       [debug]
+       debug_lvl = "trace"
+       ```
+   * Save the changes to the default.toml file.  
+   Now, your project is configured with the basic settings for your store. Feel free to explore and customize other configurations in the config folder to match your specific requirements.
 
 ## Usage
 
