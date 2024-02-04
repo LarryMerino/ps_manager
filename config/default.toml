@@ -1,5 +1,5 @@
-[host]
-url = "http://localhost:8080/api"
+[credentials]
+host = "http://localhost:8080/api"
 key = "WVpSWTFOUTU5UVdURkxQWU5QWDk3OVFUN1VHUzIzQks6"
 
 [debug]
