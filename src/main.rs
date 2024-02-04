@@ -1,9 +1,7 @@
 use indicatif::MultiProgress;
 use indicatif_log_bridge::LogWrapper;
 use log::{debug, info};
-
-use crate::settings::{Settings, SettingsProvider};
-pub mod settings;
+use ps_invoice_generator::settings::{Settings, SettingsProvider};
 
 // Check this for some inspiration
 // https://github.com/JaynewDee/portform/blob/866727ad3cd6ff499844d54b673472f646c95a40/src/generate.rs#L4

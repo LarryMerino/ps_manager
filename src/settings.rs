@@ -5,9 +5,37 @@ use serde_derive::Deserialize;
 
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
-struct Host {
-    url: String,
+struct Credentials {
+    host: String,
     key: String,
+}
+
+pub trait CredentialsProvider {
+    fn get_api_credential_provider(&self) -> impl ApiCredentialsProvider;
+}
+
+pub trait ApiCredentialsProvider {
+    fn get_host(&self) -> String;
+    fn get_raw_key(&self) -> String;
+}
+
+impl CredentialsProvider for Credentials {
+    fn get_api_credential_provider(&self) -> impl ApiCredentialsProvider {
+        Credentials {
+            host: self.host.clone(),
+            key: self.key.clone()
+        }
+    }
+}
+
+impl ApiCredentialsProvider for Credentials {
+    fn get_host(&self) -> String {
+        self.host.clone()
+    }
+
+    fn get_raw_key(&self) -> String {
+        self.key.clone()
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -29,7 +57,7 @@ impl DebugConfProvider for DebugConf {
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
 pub struct Settings {
-    host: Host,
+    credentials: Credentials,
     debug: DebugConf,
 }
 
