@@ -1,0 +1,24 @@
+[package]
+name = "ps_manager"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+base64               = { version = "0.22.0" }
+config               = { version = "0.14.0" }
+console              = { version = "0.15.7" }
+env_logger           = { version = "0.11.1" }
+indicatif            = { version = "0.17.7" }
+indicatif-log-bridge = { version = "0.2.2" }
+log                  = { version = "0.4.20" , features = ["max_level_trace"] }
+printpdf             = { version = "0.7.0" }
+ps_macro             = { version = "0.1.0", path = "../ps_macro"}
+reqwest              = { version = "0.12.4" }
+serde                = { version = "1.0.196" }
+serde_derive         = { version = "1.0.196" }
+serde_json           = { version = "1.0.94" }
+tokio                = { version = "1.35.1", features = ["full"]}
+url                  = { version = "2.5.0" }
