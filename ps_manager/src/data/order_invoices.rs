@@ -41,5 +41,7 @@ pub struct OrderInvoice {
     pub shipping_tax_computation_method: String,
     pub total_wrapping_tax_excl: String,
     pub total_wrapping_tax_incl: String,
+    pub shop_address: String,
+    pub note: String,
     pub date_add: String,
 }

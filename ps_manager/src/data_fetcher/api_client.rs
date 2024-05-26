@@ -1,13 +1,17 @@
 use crate::{
-    data::ps::{
-        order_invoice::{OrderInvoice, OrderInvoiceData, OrderInvoiceId, OrderInvoices},
+    data::{
+        customers::{Customer, CustomerData, CustomerId, Customers}, 
+        order_details::{OrderDetail, OrderDetailData, OrderDetailId, OrderDetails}, 
+        order_invoices::{OrderInvoice, OrderInvoiceData, OrderInvoiceId, OrderInvoices}, 
+        orders::{Order, OrderData, OrderId, Orders},
         PsId,
     },
     data_fetcher::DataResource,
-    settings::ApiCredentialsProvider,
 };
 
-use super::{DataFetcher, InvoiceFetcher, Resource};
+use super::{
+    CustomersFetcher, DataFetcher, OrderDetailsFetcher, OrderInvoicesFetcher, OrdersFetcher, Resource,
+};
 
 use base64::{engine::general_purpose, Engine as _};
 use reqwest::header::{HeaderMap, AUTHORIZATION};
@@ -73,6 +77,11 @@ impl ApiDataFetcherBuilder {
     }
 }
 
+pub trait PsApiCredentialsProvider {
+    fn get_host(&self) -> String;
+    fn get_raw_key(&self) -> String;
+}
+
 #[derive(Debug)]
 pub struct ApiDataFetcher {
     host: Host,
@@ -82,7 +91,7 @@ pub struct ApiDataFetcher {
 }
 
 impl ApiDataFetcher {
-    pub fn new(credentials: &impl ApiCredentialsProvider) -> ApiDataFetcherBuilder {
+    pub fn new(credentials: &impl PsApiCredentialsProvider) -> ApiDataFetcherBuilder {
         ApiDataFetcherBuilder {
             host: credentials.get_host(),
             key: credentials.get_raw_key(),
@@ -135,20 +144,74 @@ impl DataFetcher for ApiDataFetcher {
     }
 }
 
-impl InvoiceFetcher for ApiDataFetcher {
-    async fn retrieve_invoices_ids(&self) -> Vec<OrderInvoiceId> {
+impl OrderDetailsFetcher for ApiDataFetcher {
+    async fn retrieve_order_details_id(&self) -> Vec<OrderDetailId> {
+        let body = self
+            .retrieve_data(self.get_end_point(Resource::OrderDetails, None::<OrderDetailId>))
+            .await;
+        let data: OrderDetails = serde_json::from_str(&body).unwrap();
+        data.order_details
+    }
+
+    async fn retrieve_order_detail(&self, id: OrderDetailId) -> OrderDetail {
+        let body = self
+            .retrieve_data(self.get_end_point(Resource::OrderDetails, Some(id)))
+            .await;
+        let data: OrderDetailData = serde_json::from_str(&body).unwrap();
+        data.order_detail
+    }
+}
+
+impl CustomersFetcher for ApiDataFetcher {
+    async fn retrieve_customers_id(&self) -> Vec<CustomerId> {
+        let body = self
+            .retrieve_data(self.get_end_point(Resource::Customers, None::<CustomerId>))
+            .await;
+        let data: Customers = serde_json::from_str(&body).unwrap();
+        data.customers
+    }
+
+    async fn retrieve_customer(&self, id: CustomerId) -> Customer {
+        let body = self
+            .retrieve_data(self.get_end_point(Resource::Customers, Some(id)))
+            .await;
+        let data: CustomerData = serde_json::from_str(&body).unwrap();
+        data.customer
+    }
+}
+
+impl OrderInvoicesFetcher for ApiDataFetcher {
+    async fn retrieve_order_invoices_id(&self) -> Vec<OrderInvoiceId> {
         let body = self
             .retrieve_data(self.get_end_point(Resource::OrderInvoices, None::<OrderInvoiceId>))
             .await;
         let data: OrderInvoices = serde_json::from_str(&body).unwrap();
         data.order_invoices
     }
-    async fn retrieve_invoice(&self, id: OrderInvoiceId) -> OrderInvoice {
+    async fn retrieve_order_invoice(&self, id: OrderInvoiceId) -> OrderInvoice {
         let body = self
             .retrieve_data(self.get_end_point(Resource::OrderInvoices, Some(id)))
             .await;
         let data: OrderInvoiceData = serde_json::from_str(&body).unwrap();
         data.order_invoice
+    }
+}
+
+impl OrdersFetcher for ApiDataFetcher {
+    async fn retrieve_orders_id(&self) -> Vec<OrderId> {
+        let body = self
+            .retrieve_data(self.get_end_point(Resource::Orders, None::<OrderId>))
+            .await;
+        let data: Orders = serde_json::from_str(&body).unwrap();
+        data.orders
+    }
+
+    async fn retrieve_order(&self, id: OrderId) -> Order {
+        let body = self
+            .retrieve_data(self.get_end_point(Resource::Orders, Some(id)))
+            .await;
+        let data: OrderData = serde_json::from_str(&body).unwrap();
+        data.order
     }
 }
 

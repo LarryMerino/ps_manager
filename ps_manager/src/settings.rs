@@ -1,6 +1,7 @@
 use std::env;
 
 use config::{Config, ConfigError, File};
+use ps_manager::data_fetcher::api_client::PsApiCredentialsProvider;
 use serde_derive::Deserialize;
 
 /// Represent
@@ -12,16 +13,11 @@ struct Credentials {
 }
 
 pub trait CredentialsProvider {
-    fn get_api_credential_provider(&self) -> impl ApiCredentialsProvider;
-}
-
-pub trait ApiCredentialsProvider {
-    fn get_host(&self) -> String;
-    fn get_raw_key(&self) -> String;
+    fn get_api_credential_provider(&self) -> impl PsApiCredentialsProvider;
 }
 
 impl CredentialsProvider for Credentials {
-    fn get_api_credential_provider(&self) -> impl ApiCredentialsProvider {
+    fn get_api_credential_provider(&self) -> impl PsApiCredentialsProvider {
         Credentials {
             host: self.host.clone(),
             key: self.key.clone(),
@@ -29,7 +25,7 @@ impl CredentialsProvider for Credentials {
     }
 }
 
-impl ApiCredentialsProvider for Credentials {
+impl PsApiCredentialsProvider for Credentials {
     fn get_host(&self) -> String {
         self.host.clone()
     }
@@ -64,7 +60,7 @@ pub struct Settings {
 
 pub trait SettingsProvider: std::fmt::Debug {
     fn debug_conf_provider(&self) -> &impl DebugConfProvider;
-    fn api_credential_provider(&self) -> &impl ApiCredentialsProvider;
+    fn api_credential_provider(&self) -> &impl PsApiCredentialsProvider;
 }
 
 impl SettingsProvider for Settings {
@@ -72,7 +68,7 @@ impl SettingsProvider for Settings {
         &self.debug
     }
 
-    fn api_credential_provider(&self) -> &impl ApiCredentialsProvider {
+    fn api_credential_provider(&self) -> &impl PsApiCredentialsProvider {
         &self.credentials
     }
 }
